@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />
+    </head>
+    <body>
+        <div th:replace="index::logout"></div>
+        <h1>管理后台</h1>
+        <p>需要管理员权限</p>
+        <p><a href="/index" th:href="@{/index}">返回主页</a></p>
+    </body>
+</html>

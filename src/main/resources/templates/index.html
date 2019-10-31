@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />
+    </head>
+    <body>
+        <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
+            用户: <span sec:authentication="name"></span> |
+            角色: <span sec:authentication="principal.authorities"></span>
+            <div>
+                <form action="#" th:action="@{/logout}" method="post">
+                    <input type="submit" value="注销" />
+                </form>
+            </div>
+        </div>
+        <h1>主页</h1>
+        <p>管理员登陆后可进入管理后台</p>
+        <ul>
+            <li><a href="/info" th:href="@{/info}">管理后台</a></li>
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Login page</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />
+	</head>
+    <body>
+        <h1>登陆页</h1>
+        <p th:if="${loginError}" class="error">帐号或密码错误</p>
+        <form th:action="@{/login}" method="post">
+            <label for="username">帐号:</label>
+            <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" /> <br />
+            <input type="submit" value="登陆" />
+        </form>
+        <p><a href="/index" th:href="@{/index}">返回主页</a></p>
+    </body>
+</html>
