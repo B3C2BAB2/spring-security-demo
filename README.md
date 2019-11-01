@@ -62,10 +62,36 @@ SecurityContextHolder.getContext().setAuthentication(anAuthentication)设置。
 接口，用于获取用户特定信息。主要作为DAO由org.springframework.security.authentication.dao.DaoAuthenticationProvider使用。只声明一个只读方法loadUserByUsername。
 
 ### org.springframework.security.access.intercept.AbstractSecurityInterceptor
-抽象类，实现了对安全对象的拦截
+抽象类，实现了对安全对象的拦截。
+
 ### org.springframework.security.access.ConfigAttribute
 接口，存放安全系统（RunAsManager、AccessDecisionManager）相关的配置。 
-### RoleVoter
+
+### org.springframework.security.access.AccessDecisionManager
+接口,用于访问控制,实现的抽象类为AbstractAccessDecisionManager。
+ 
+### org.springframework.security.access.AbstractAccessDecisionManager
+实现了AccessDecisionManager中的方法如下：
+ - void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)：由子类实现。拒绝访问时抛出InsufficientAuthenticationException。
+ - boolean supports(ConfigAttribute attribute)：迭代调用AccessDecisionManager的AccessDecisionVoter判断参数ConfigAttribute是否能被AccessDecisionManager处理。任意AccessDecisionVoter支持时返回true。
+ - boolean supports(Class<?> clazz)：迭代调用AccessDecisionManager的AccessDecisionVoter判断参数类型是否能被AccessDecisionManager处理。所有AccessDecisionVoter支持时返回true。
+ 
+有3个子类：
+ - AffirmativeBased：有投赞成票时允许访问。无赞成票和反对票时，若AbstractAccessDecisionManager.allowIfAllAbstainDecisions（默认为false）为true则允许访问。否则拒绝访问。
+ - ConsensusBased：赞成票大于反对票或赞成、反对等票且AbstractAccessDecisionManager.allowIfAllAbstainDecisions（默认为false）为true时允许访问。否则拒绝访问。
+ - UnanimousBased：无任何反对票，且赞成票大于0或AbstractAccessDecisionManager.allowIfAllAbstainDecisions（默认为false）为true时允许访问。否则拒绝访问。
+
+### org.springframework.security.access.AccessDecisionVoter
+接口，AbstractAccessDecisionManager中包含若干个AccessDecisionVoter，在supports和decide方法中会被调用。声明方法如下：
+ - boolean supports(ConfigAttribute attribute)：影响AbstractAccessDecisionManager的supports方法的返回结果。
+ - boolean supports(Class<?> clazz)：影响AbstractAccessDecisionManager的supports方法的返回结果。
+ - int vote(Authentication authentication, S object, Collection<ConfigAttribute> attributes)：影响AbstractAccessDecisionManager的decide方法的返回结果。返回值有：ACCESS_GRANTED = 1，ACCESS_ABSTAIN = 0，ACCESS_DENIED = -1。
+
+常用的实现类有：
+ - AuthenticatedVoter：根据认证状态决定放回结果。
+ - RoleVoter：根据认证拥有的角色决定返回结果。
+ - RoleHierarchyVoter：RoleVoter的子类，根据认证拥有的角色及角色的继承关系决定返回结果。
+ 
 ### AuthenticationEntryPoint
 ### UsernamePasswordAuthenticationToken 
 ### ExceptionTranslationFilter
